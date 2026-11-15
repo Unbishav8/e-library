@@ -1,0 +1,44 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+*.pyc
+
+# Virtual Environments
+venv/
+.venv/
+env/
+lib/
+Lib/
+Include/
+Scripts/
+pyvenv.cfg
+
+# Local Environment Variables & Secrets
+.env
+*.env
+!.env.example
+
+# Local SQLite Database
+*.db
+*.sqlite
+*.sqlite3
+library.db
+
+# Flask session storage
+flask_session/
+instance/
+
+# Editor & OS files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+
+# Distribution / Packaging
+build/
+dist/
+*.egg-info/

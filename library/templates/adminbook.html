@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <script src="https://kit.fontawesome.com/4dc31d81f6.js" crossorigin="anonymous"></script>
+
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: #eef1f5;
+            font-family: Arial, sans-serif;
+        }
+
+        .container {
+            max-width: 1250px;
+            margin: auto;
+            padding: 20px;
+        }
+
+        /* Search Bar */
+        .search-box {
+            display: flex;
+            align-items: center;
+            background: #fff;
+            padding: 10px 20px;
+            border-radius: 40px;
+            box-shadow: 0px 5px 10px rgba(0,0,0,0.1);
+            margin: 25px auto;
+            max-width: 450px;
+        }
+
+        .search-box input {
+            border: none;
+            outline: none;
+            font-size: 16px;
+            flex: 1;
+        }
+
+        .search-box button {
+            border: none;
+            background: #007bff;
+            color: white;
+            padding: 8px 15px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 15px;
+        }
+
+        /* Cards Grid */
+        .grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+            justify-content: center;
+        }
+
+        /* Book Card */
+        .card {
+            width: 20rem;
+            background: #fff;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid #dcdcdc;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+            transition: 0.3s;
+            position: relative;
+        }
+
+        .card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+        }
+
+        .card img {
+            width: 100%;
+            height: 280px;
+            object-fit: cover;
+        }
+
+        .card-body {
+            padding: 18px;
+            text-align: center;
+        }
+
+        .card-title {
+            margin: 8px 0;
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .price {
+            color: #28a745;
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 12px;
+        }
+
+        .actions {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+        }
+
+        .btn {
+            padding: 8px 18px;
+            border-radius: 5px;
+            border: none;
+            cursor: pointer;
+            font-size: 15px;
+            color: white;
+        }
+
+        .btn-update {
+            background: #ffc107;
+        }
+
+        .btn-delete {
+            background: #dc3545;
+        }
+
+        .wishlist-btn {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            background: rgba(255,255,255,0.9);
+            border: none;
+            border-radius: 50%;
+            padding: 10px;
+            cursor: pointer;
+        }
+
+        .wishlist-btn i {
+            color: #ff4757;
+            font-size: 18px;
+        }
+    </style>
+</head>
+
+<body>
+
+<!-- Flash Messages -->
+{% with messages = get_flashed_messages() %}
+{% if messages %}
+{% for message in messages %}
+<center style="color: red; margin-top:10px;">{{ message }}</center>
+{% endfor %}
+{% endif %}
+{% endwith %}
+
+<div class="container">
+
+    <!-- Search Box -->
+    <div class="search-box">
+        <form method="get" action="{{ url_for('user_search') }}" style="display:flex;width:100%;">
+            <input type="text" name="search" placeholder="Search books..." value="{{ search }}">
+            <button type="submit"><i class="fa fa-search"></i></button>
+        </form>
+    </div>
+
+    <!-- Books Grid -->
+    <div class="grid">
+        {% for i in booksdata %}
+        <div class="card">
+
+            <!-- Wishlist -->
+            <button class="wishlist-btn">
+                <a href="{{ url_for('addcart', bookid=i[0]) }}">
+                    <i class="fa-solid fa-heart"></i>
+                </a>
+            </button>
+
+            <!-- Book Cover Image -->
+            <a href="{{ url_for('View_book', bookid=i[0]) }}">
+                <img src="{{ url_for('static', filename='uploads/' + i[6]) }}" alt="Book Image">
+            </a>
+
+            <div class="card-body">
+                <h4 class="card-title">Name: {{ i[1] }}</h4>
+                <p class="price"> Price: {{ i[2] }}₹</p>
+
+                <!-- Buttons -->
+                <div class="actions">
+
+                    <a href="{{ url_for('updatebook', bookid=i[0]) }}">
+                        <button class="btn btn-update">Update</button>
+                    </a>
+
+                    <a href="{{ url_for('delete_book', bookid=i[0]) }}">
+                        <button class="btn btn-delete">Delete</button>
+                    </a>
+
+                </div>
+
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+</div>
+
+</body>
+</html>

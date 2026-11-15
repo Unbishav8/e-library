@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Library Rent Timer</title>
+
+    <style>
+        body {
+            font-family: Arial;
+            text-align: center;
+            padding-top: 30px;
+        }
+
+        #rentBox {
+            font-size: 24px;
+            color: green;
+            margin-top: 10px;
+        }
+
+        #timer {
+            font-size: 30px;
+            color: red;
+        }
+
+        #downloadBtn {
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 18px;
+        }
+
+        #notesBox {
+            width: 300px;
+            height: 100px;
+            margin-top: 20px;
+            font-size: 16px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h2>Library Book Rent Timer</h2>
+
+    <p id="timer">Reading time: 0 min 0 sec</p>
+    <p id="rentBox">Rent₹: 0</p>
+ 
+    <iframe 
+    src="/pdfview/{{ item.bookid}}">        
+    width="60%" 
+    height="700" 
+    style="border:1px solid #ccc;">
+    </iframe>
+
+    <button id="downloadBtn">Download PDF</button>
+
+    <!-- jsPDF Library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+    <script>
+
+        let seconds = 0;
+        let minutes = 0;
+        let totalRent = 0;
+
+        const rentPerMinute = {{ rent }};
+
+        const timerEl = document.getElementById("timer");
+        const rentEl = document.getElementById("rentBox");
+
+        /* Timer logic */
+        setInterval(() => {
+            seconds++;
+
+            if (seconds === 60) {
+                seconds = 0;
+                minutes++;
+                totalRent += rentPerMinute;
+
+                rentEl.textContent = "Rent₹: " + totalRent;
+            }
+
+            timerEl.textContent =
+                "Reading time: " + minutes + " min " + seconds + " sec";
+        }, 1000);
+
+        /* PDF Generation */
+        document.getElementById("downloadBtn").addEventListener("click", () => {
+
+            const { jsPDF } = window.jspdf;
+            const pdf = new jsPDF();
+
+            const notes = document.getElementById("notesBox").value;
+
+            pdf.setFontSize(18);
+            pdf.text("Library Reading Summary", 20, 20);
+
+            pdf.setFontSize(14);
+            pdf.text("Reading Time: " + minutes + " min " + seconds + " sec", 20, 40);
+            pdf.text("Total Rent: " + totalRent, 20, 55);
+
+            pdf.text("Notes:", 20, 75);
+
+            /* Add notes content to PDF */
+            pdf.text(notes || "No Notes Provided", 20, 90);
+
+            /* Save report to database */
+            fetch('/save_reading_report', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    minutes: minutes,
+                    seconds: seconds,
+                    rent: totalRent,
+                    notes: notes || "No Notes Provided"
+                })
+            }).catch(err => console.log('Report save error:', err));
+
+            pdf.save("Reading_Report.pdf");
+        });
+
+    </script>
+
+</body>
+
+</html>

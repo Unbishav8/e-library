@@ -1,0 +1,302 @@
+{% extends "homepage.html" %}
+<div>{% block div %}{% endblock %}</div>
+<div>{% block ser1 %}{% endblock %}</div>
+{% block content %}
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Popular Books</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="popular.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+</head>
+<style>
+    body {
+    font-family: 'Poppins', sans-serif;
+    margin: 0;
+    background: linear-gradient(120deg, #f4f6fa, #e9efff);
+    color: #333;
+}
+
+header {
+    text-align: center;
+    margin-top: -20px;
+    padding: 60px 20px 20px;
+    background: linear-gradient(135deg, #6a11cb, #2575fc);
+    color: white;
+    border-bottom-left-radius: 40px;
+    border-bottom-right-radius: 40px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+}
+
+header h1 {
+    font-size: 2.3em;
+    margin: 0;
+}
+
+header p {
+    font-size: 1em;
+    opacity: 0.9;
+}
+
+/* Genre Section */
+.genre-section {
+    text-align: center;
+    margin: 40px 20px 20px;
+}
+
+.genres {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 15px;
+}
+
+.genres button {
+    background: #2575fc;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 25px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.genres button:hover {
+    background: #1b5fd6;
+    transform: translateY(-2px);
+}
+
+/* Books Section */
+.books-section {
+    padding: 20px 50px 60px;
+}
+
+.books-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 25px;
+    margin-top: 30px;
+}
+
+.book-card {
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    overflow: hidden;
+    transform: scale(1);
+    transition: all 0.3s ease;
+    opacity: 0;
+    animation: fadeInUp 0.4s forwards;
+}
+
+.book-card img {
+    width: 100%;
+    height: 250px;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.book-info {
+    padding: 15px;
+    text-align: center;
+}
+
+.book-info h3 {
+    font-size: 1.1em;
+    color: #333;
+    margin-bottom: 5px;
+}
+
+.book-info p {
+    color: #666;
+    font-size: 0.9em;
+}
+
+/* Hover animation */
+.book-card:hover {
+    transform: translateY(-5px) scale(1.03);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+}
+
+.book-card:hover img {
+    transform: scale(1.05);
+}
+
+/* Animation */
+@keyframes fadeInUp {
+    from {
+        transform: translateY(20px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+/* Placeholder */
+.placeholder {
+    text-align: center;
+    color: #777;
+    padding: 40px;
+    grid-column: 1 / -1;
+}
+
+/* Footer */
+footer {
+    background: #1e1e2f;
+    color: white;
+    text-align: center;
+    padding: 15px;
+    font-size: 0.9em;
+    margin-top: 55px;
+    border-radius: 8px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .books-container {
+        grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    }
+}
+
+</style>
+<body>
+
+    <!-- Header -->
+    <header>
+        <h1>📚 Popular Books</h1>
+        <p>Discover the most popular books across genres</p>
+    </header>
+
+    <!-- Genre Filter -->
+    <section class="genre-section">
+        <h2>Explore by Genre</h2>
+        <div class="genres">
+            <button onclick="showBooks('fiction')">Fiction</button>
+            <button onclick="showBooks('science')">Science</button>
+            <button onclick="showBooks('technology')">Technology</button>
+            <button onclick="showBooks('history')">History</button>
+            <button onclick="showBooks('selfhelp')">Self Help</button>
+        </div>
+    </section>
+
+    <!-- Book Grid -->
+    <section class="books-section">
+        <div id="booksContainer" class="books-container">
+            <div class="placeholder">
+                <h3>Click on a genre to see the top 5 books 📖</h3>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <p>© 2025 Library Portal | Designed with ❤</p>
+    </footer>
+
+<script>
+const books = {
+    fiction: [
+        { title: "To Kill a Mockingbird", author: "Harper Lee", img: "https://th.bing.com/th/id/OIP.R_sWojMpUVAe43S6gZbjHAHaLH?w=204&h=306&c=7&r=0&o=7&cb=ucfimgc2&dpr=1.3&pid=1.7&rm=3", link:"https://drive.google.com/file/d/1slwrNdiax7OZLNueAYYF79txVOwU3Kq4/view?usp=sharing"},
+        { title: "The Great Gatsby", author: "F. Scott Fitzgerald", img: "https://tse4.mm.bing.net/th/id/OIP.pWkWGTBJvzbKOyC9Cy1oJQHaJr?pid=Api&P=0&h=180", link:"https://www.scribd.com/document/944203893/The-Great-Gatsby"},
+        { title: "1984", author: "George Orwell", img: "https://covers.openlibrary.org/b/id/7222246-L.jpg", link:"https://drive.google.com/file/d/0B9J5LDUmtu_0bnVIbVJrTjZZTWM/view?usp=sharing&resourcekey=0--sUzIH5C1tBJtGyHx4eSyg"},
+        { title: "The Alchemist", author: "Paulo Coelho", img: "https://tse4.mm.bing.net/th/id/OIP.2X3XjyPDAw8mDOgP1fyUWAHaJ8?pid=Api&P=0&h=180",link: "https://drive.google.com/file/d/0B7JIaJnDZOlWakNFMmdvck9PLUk/view?usp=sharing&resourcekey=0-ErNxseTeMuuYuxAHgWKhJw"},
+        { title: "Pride and Prejudice", author: "Jane Austen", img: "https://tse2.mm.bing.net/th/id/OIP.XdbshhePCs-gn8vjPZ8tYAHaLH?pid=Api&P=0&h=180", link:"https://drive.google.com/file/d/1HBPc7R5ujT5WwRzNYOJIBy42mSOEVzNu/view?usp=sharing" }
+    ],
+    science: [
+        { title: "A Brief History of Time", author: "Stephen Hawking", img: "http://iasbaba.com/wp-content/uploads/2016/04/A-Brief-History-of-Time-683x1024.jpg", link: "https://drive.google.com/file/d/0B1PBdu03t91DYUdVc0c4Y2Vzb0k/view?usp=sharing&resourcekey=0-evEIWkVG3IO0k73tz2dlSw" },
+        { title: "The Selfish Gene", author: "Richard Dawkins", img: "https://tse3.mm.bing.net/th/id/OIP.byHkJMz7xc5R4RsLjmvOpwAAAA?pid=Api&P=0&h=180", link:"https://www.scribd.com/document/419976351/SELFISH-GENE-pdf" },
+        { title: "Cosmos", author: "Carl Sagan", img: "https://tse3.mm.bing.net/th/id/OIP.QoOd09ImjHOaWo1Vl8Q9FAHaK4?pid=Api&P=0&h=180", link: "https://drive.google.com/file/d/0BwRNqgC-jvinLUNzQkFLb194S0E/view?usp=sharing&resourcekey=0-1KapUKBLhDiHTsWlaZHDWg" },
+        { title: "The Gene", author: "Siddhartha Mukherjee", img: "https://tse2.mm.bing.net/th/id/OIP.ttKSvWXqxIYeKISmfo5b1AAAAA?pid=Api&P=0&h=180", link: "https://drive.google.com/file/d/0BwRNqgC-jvinLUNzQkFLb194S0E/view?usp=sharing&resourcekey=0-1KapUKBLhDiHTsWlaZHDWg" },
+        { title: "Astrophysics for People in a Hurry", author: "Neil deGrasse Tyson", img: "https://tse2.mm.bing.net/th/id/OIP.uBm-r_gV0xJ5zcA7LIuoLgAAAA?pid=Api&P=0&h=180",link: "https://drive.google.com/file/d/0BwRNqgC-jvinLUNzQkFLb194S0E/view?usp=sharing&resourcekey=0-1KapUKBLhDiHTsWlaZHDWg" }
+    ],
+    technology: [
+        { title: "Clean Code", author: "Robert C. Martin", img: "https://tse2.mm.bing.net/th/id/OIP.8d8udgY4U7yHb8-wtUuBgwHaI5?pid=Api&P=0&h=180",link: "https://drive.google.com/file/d/1anGq4rROh7DAF-c35-k7a3cizXHu9F6L/view?usp=sharing" },
+        { title: "The Pragmatic Programmer", author: "Andrew Hunt", img: "https://tse1.mm.bing.net/th/id/OIP.c1XGbI_l20HB9QCcUO5xFQHaD4?pid=Api&P=0&h=180", link: "https://drive.google.com/file/d/0B0GFtonMpSzgSVZyb3kzYk01c3M/view?usp=sharing&resourcekey=0-Ggo191TSlRlTXnrU1wfHmw" },
+        { title: "Code Complete", author: "Steve McConnell", img: "https://tse3.mm.bing.net/th/id/OIP.22vAlBy3-vyqFTK8hzFaDgHaD4?pid=Api&P=0&h=180", },
+        { title: "Artificial Intelligence", author: "Melanie Mitchell", img: "https://tse1.mm.bing.net/th/id/OIP.uju7VGsszLEGUPnnu7MlvAHaJ4?pid=Api&P=0&h=180",link:"https://drive.google.com/file/d/1irweU5InT6ybNvq5w9RA_OaXc9qQxwwd/view?usp=drive_link" },
+        { title: "The Innovators", author: "Walter Isaacson", img: "https://tse2.mm.bing.net/th/id/OIP.Ksxjmrv-r3PFCuLr2uHr6gAAAA?pid=Api&P=0&h=180" }
+    ],
+    history: [
+        { title: "Sapiens", author: "Yuval Noah Harari", img: "https://covers.openlibrary.org/b/id/8225631-L.jpg", link: "https://drive.google.com/file/d/1x0dMOcDoaIIhGYglaLn5U5RvCO_-1tFQ/view?usp=sharing" },
+        { title: "Guns, Germs, and Steel", author: "Jared Diamond", img: "https://covers.openlibrary.org/b/id/8312066-L.jpg"},
+        { title: "The Diary of a Young Girl", author: "Anne Frank", img: "https://covers.openlibrary.org/b/id/8231851-L.jpg", link:"https://drive.google.com/file/d/0BxHh2t7Lhb95aWxPYVpTaWgySkE/view?usp=sharing&resourcekey=0-OIYrnw8iFc9ZRt58Y1grdg"},
+        { title: "Team of Rivals", author: "Doris Kearns Goodwin", img: "https://covers.openlibrary.org/b/id/8228632-L.jpg", link:"https://cdn.bookey.app/files/pdf/book/en/team-of-rivals.pdf" },
+        { title: "The Silk Roads", author: "Peter Frankopan", img: "https://covers.openlibrary.org/b/id/8231871-L.jpg" }
+    ],
+    selfhelp: [
+        { title: "Atomic Habits", author: "James Clear", img: "https://covers.openlibrary.org/b/id/9872200-L.jpg", link:"https://drive.google.com/file/d/1eAZMdXO-Zn4_90TV365KMpIqfxUy7J0t/view?usp=sharing" },
+        { title: "7 Habits of Highly Effective People", author: "Stephen Covey", img: "https://covers.openlibrary.org/b/id/8228699-L.jpg", link:"https://drive.google.com/file/d/1ekn5QceP7E1mjdv4QEKTmuVwIZ6ZOtxg/view?usp=sharing" },
+        { title: "Think and Grow Rich", author: "Napoleon Hill", img: "https://covers.openlibrary.org/b/id/8228705-L.jpg" },
+        { title: "The Power of Now", author: "Eckhart Tolle", img: "https://covers.openlibrary.org/b/id/8228709-L.jpg" },
+        { title: "Can't Hurt Me", author: "David Goggins", img: "https://covers.openlibrary.org/b/id/9872201-L.jpg" }
+    ]
+};
+function generatePDF(book) {
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF();
+
+    doc.setFontSize(22);
+    doc.text(`TITLE: ${book.title}`, 20, 30);
+
+    doc.setFontSize(16);
+    doc.text(`Author: ${book.author}`, 20, 50);
+
+    doc.setFontSize(12);
+    doc.text('Enjoy reading this book!', 20, 70);
+
+    doc.setFontSize(10);
+    doc.text(`link :- ${book.link}`, 20, 190);
+
+    // Optionally add the image of the book cover
+    const img = new Image();
+    img.crossOrigin = "anonymous"; // To avoid CORS issues
+    img.src = book.img;
+    img.onload = () => {
+        doc.addImage(img, 'JPEG', 20, 80, 60, 90); // x, y, width, height
+        doc.save(`${book.title}.pdf`);
+    };
+    img.onerror = () => {
+        doc.save(`${book.title}.pdf`);
+    };
+}
+function showBooks(genre) {
+    document.querySelectorAll('.genres button').forEach(btn => btn.classList.remove('active'));
+    document.querySelector(`.genres button[onclick="showBooks('${genre}')"]`).classList.add('active');
+
+    const container = document.getElementById('booksContainer');
+    container.innerHTML = '';
+    const selected = books[genre];
+    if (!selected) return;
+
+    selected.forEach((book, index) => {
+        const card = document.createElement('div');
+        card.classList.add('book-card');
+        card.style.animationDelay = `${index * 0.2}s`;
+        card.innerHTML = `
+            <img src="${book.img}" alt="${book.title}">
+            <div class="book-info">
+                <h3>${book.title}</h3>
+                <p>by ${book.author}</p>
+                <button class="download-btn">Download PDF</button>
+            </div>
+        `;
+
+        // Add click event to generate PDF
+        card.querySelector('.download-btn').addEventListener('click', () => {
+            generatePDF(book);
+        });
+
+        container.appendChild(card);
+    });
+}
+
+</script>
+
+</body>
+{% endblock %}

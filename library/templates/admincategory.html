@@ -1,0 +1,177 @@
+{% extends "adminpanel.html" %}
+<div>{% block div %}{% endblock %}</div>
+{% block content %}
+
+<head>
+    <script src="https://kit.fontawesome.com/4dc31d81f6.js" crossorigin="anonymous"></script>
+    <style>
+        body {
+            margin-top: 80px;
+            font-family: 'Arial', sans-serif;
+        }
+
+
+        /* ===== Main Content ===== */
+        .main-content {
+            flex: 1;
+            padding: 20px;
+        }
+
+        /* ===== Cards ===== */
+        .row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0px;
+            justify-content: flex-start;
+        }
+
+        .card {
+            width: 16.5rem;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+            background-color: #fff;
+            margin-left: -170px;  
+            margin-top: -25px;                    
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .card-img-top {
+            width: 100%;
+            height: 220px;
+            object-fit: cover;
+            transition: transform 0.3s;
+        }
+
+        .card-img-top:hover {
+            transform: scale(1.05);
+        }
+
+        .card-body {
+            padding: 15px;
+            text-align: center;
+        }
+
+        .card-id {
+            font-size: 14px;
+            color: #888;
+            margin-bottom: 10px;
+        }
+
+        .card-title {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        .button {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .button .btn {
+            padding: 8px 15px;
+            font-size: 14px;
+            border-radius: 5px;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.2s;
+        }
+
+        .btn-warning {
+            background-color: #ffc107;
+            color: #fff;
+        }
+
+        .btn-warning:hover {
+            background-color: #e0a800;
+            transform: scale(1.05);
+        }
+
+        .btn-success {
+            background-color: #28a745;
+            color: #fff;
+        }
+
+        .btn-success:hover {
+            background-color: #218838;
+            transform: scale(1.05);
+        }
+
+        /* ===== Responsive ===== */
+        @media (max-width: 992px) {
+
+            .card {
+                width: 45%;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .card {
+                width: 100%;
+            }
+
+            .card-img-top {
+                height: 250px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Main Content -->
+    <div class="main-content">
+          <!-- Flash messages -->
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+        {% for message in messages %}
+        <center style="color: bisque;">{{ message }}</center>
+        {% endfor %}
+        {% endif %}
+        {% endwith %}
+
+
+
+        {% if category_data %}
+        <!-- Cards -->
+        <div class="row g-5">
+            {% for i in category_data %}
+            <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+                <div class="card">
+                    <a href="#">
+                        <img src="/static/uploads/{{ i[6] }}" class="card-img-top">
+                    </a>
+
+                    <div class="card-body">
+                        <h6 class="card-id">book_id: : {{ i[0][0:10] }}..</h6>
+                        <h6 class="card-title">book_name:{{ i[1][0:10] }}</h6>
+                        <h6 class="card-title">book_Price:{{ i[2] }} /-</h6>
+
+                        <div class="button">
+                            <a href="#" class="btn btn-warning btn-sm">
+                                Rent
+                            </a>
+                            <a href="#" class="btn btn-success btn-sm">
+                                Buy
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+            crossorigin="anonymous"></script>
+</body>
+{% endblock %}

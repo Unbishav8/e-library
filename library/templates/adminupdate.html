@@ -1,0 +1,205 @@
+
+<script src="https://kit.fontawesome.com/4dc31d81f6.js" crossorigin="anonymous"></script>
+<style>
+    body {
+        background-attachment: fixed;
+        font-family: "Poppins", sans-serif;
+        margin: 0;
+        padding: 0;
+        color: #fff;
+        background: url('https://images.squarespace-cdn.com/content/v1/534ad50ae4b04a5110f5ae72/f0cd330d-46de-4f2e-864a-31e2741cf6ae/Salle+Ovale,%2CBNF+Richelieu,%2CHenri+Labrouste,%2C1936.jpg')
+      no-repeat center center/cover;
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    /* UPGRADED PROFILE CARD */
+    .upp {
+        width: 460px;
+        background: rgba(255, 255, 255, 0.12);
+        backdrop-filter: blur(12px) saturate(180%);
+        -webkit-backdrop-filter: blur(12px) saturate(180%);
+        border-radius: 18px;
+        border: 1px solid rgba(255, 255, 255, 0.25);
+        padding: 2.5rem;
+        box-shadow: 0 15px 45px rgba(0, 0, 0, 0.45);
+
+        animation: fadeSlide 0.7s ease-out;
+    }
+
+    @keyframes fadeSlide {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* PROFILE PIC AREA */
+    .profile-container {
+        position: relative;
+        width: 140px;
+        margin: 0 auto 25px;
+    }
+
+    .pimg {
+        width: 140px;
+        height: 140px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 3px solid rgba(255,255,255,0.9);
+        box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+        transition: 0.3s ease;
+    }
+
+    .pimg:hover {
+        transform: scale(1.03);
+    }
+
+    /* CAMERA BUTTON WITH GLOW EFFECT */
+    .camera-icon {
+        position: absolute;
+        bottom: -12px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: #0080ff;
+        color: #fff;
+        padding: 10px;
+        border-radius: 50%;
+        border: 3px solid white;
+        cursor: pointer;
+        font-size: 18px;
+
+        box-shadow: 0 0 10px rgba(0, 128, 255, 0.9);
+        transition: 0.25s ease;
+    }
+
+    .camera-icon:hover {
+        background: #00eaff;
+        color: #003b99;
+        transform: translateX(-50%) scale(1.15);
+        box-shadow: 0 0 18px rgba(0, 238, 255, 1);
+    }
+
+    label {
+        font-weight: 600;
+        font-size: 14px;
+        margin-bottom: 4px;
+        letter-spacing: 0.3px;
+    }
+
+    /* INPUT FIELDS – UPGRADED */
+    .form-control {
+        background: rgba(255, 255, 255, 0.75);
+        border: none;
+        border-radius: 10px;
+        padding: 12px;
+        font-size: 14px;
+        margin-bottom: 14px;
+        transition: 0.25s ease;
+    }
+
+    .form-control:focus {
+        outline: none;
+        background: rgba(255, 255, 255, 0.92);
+        box-shadow: 0 0 10px rgba(0, 128, 255, 0.8);
+    }
+
+    /* SUBMIT BUTTON – PREMIUM STYLE */
+    .btn-warning {
+        background: linear-gradient(135deg, #005eff, #00c6ff);
+        border: none;
+        color: white;
+        width: 100%;
+        padding: 12px;
+        border-radius: 10px;
+        font-size: 16px;
+        font-weight: 600;
+        letter-spacing: 0.5px;
+        transition: 0.25s ease;
+        box-shadow: 0 5px 20px rgba(0, 119, 255, 0.4);
+    }
+
+    .btn-warning:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 25px rgba(0, 200, 255, 0.55);
+        opacity: 0.95;
+    }
+
+    /* MOBILE FRIENDLY */
+    @media (max-width: 480px) {
+        .upp {
+            width: 90%;
+            padding: 1.8rem;
+        }
+        .pimg {
+            width: 120px;
+            height: 120px;
+        }
+        .camera-icon {
+            font-size: 15px;
+        }
+    }
+</style>
+
+</head>
+{% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    {% for category, message in messages %}
+      <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert"
+           style="text-align:center; margin-bottom:10px; font-weight:bold; color:white;">
+        {{ message }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
+    {% endfor %}
+  {% endif %}
+{% endwith %}
+
+<body>
+<div class="upp">
+    <form method="post" enctype="multipart/form-data">
+        <div class="profile-container">
+    <!-- Profile image -->
+    <img id="profilePreview" src="{{ url_for('static', filename='uploads/' ~ stored_data[1]) }}" alt="Profile Image" class="pimg">
+
+    <!-- Hidden file input -->
+    <input type="file" id="fileInput" name="file" accept="image/*" style="display:none;">
+
+    <!-- Camera icon overlay (clickable) -->
+    <button type="button" class="camera-icon" onclick="document.getElementById('fileInput').click();">
+        <i class="fa-solid fa-camera"></i>
+    </button>
+</div>
+
+        <div class="mb-3">
+            <label class="form-label">admin Name :</label>
+            <input type="text" class="form-control" name="adminname" value="{{stored_data[0]}}" required />
+        </div>
+
+       
+
+        <div class="mb-3">
+            <label class="form-label">Phone_no :</label>
+            <input type="text" class="form-control" name="phone" value="{{stored_data[1]}}" required />
+        </div>
+
+        <center>
+            <button class="btn btn-warning">Submit</button>
+        </center>
+    </form>
+</div>
+
+
+<script>
+    // When file is selected, preview it immediately
+    document.getElementById('fileInput').addEventListener('change', function(event) {
+        const file = event.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                document.getElementById('profilePreview').src = e.target.result;
+            };
+            reader.readAsDataURL(file);
+        }
+    });
+</script>
+</body>

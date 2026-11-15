@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>{{ storeditem_data[1] }} | BUYROUTE</title>
+
+  <!-- Bootstrap -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+
+  <style>
+    :root {
+  --accent: #ffe082;
+  --muted: #6b7280;
+}
+
+body {
+  min-height: 100vh;
+  margin: 0;
+  font-family: "Poppins", system-ui;
+  background-image: white;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  padding: 28px;
+}
+
+/* =======================
+        TOP BAR
+========================== */
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.logo {
+  width: 48px;
+  height: 48px;
+}
+
+/* =======================
+      PAGE CARD
+========================== */
+.page-card {
+  max-width: 700px;
+  margin: auto;
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.94),
+    rgba(250, 250, 250, 0.94)
+  );
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+  border: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+/* =======================
+      PRODUCT LAYOUT
+========================== */
+.product-container {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.product-img {
+  width: 220px;
+  border-radius: 12px;
+  border: 1px solid #ddd;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.product-details {
+  flex: 1;
+  max-width: 350px;
+}
+
+.product-details h2 {
+  font-size: 1.3rem;
+  margin-bottom: 12px;
+}
+
+.product-details p,
+.product-details h4 {
+  font-size: 0.95rem;
+  margin-bottom: 6px;
+}
+
+/* =======================
+        BUTTONS
+========================== */
+
+.buttons-area {
+  margin-top: 20px;
+  display: flex;
+  gap: 15px;
+  align-items: center;
+}
+
+.btn-back {
+  padding: 8px 18px;
+  font-weight: 600;
+}
+
+.btn-buy {
+  background: linear-gradient(90deg, #ffd54a, #ffb74d);
+  border: none;
+  padding: 10px 22px;
+  font-weight: 600;
+  border-radius: 6px;
+}
+/* =======================
+        TOP BAR
+========================== */
+.topbar {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: linear-gradient(90deg, #1e3c72, #2a5298);
+  padding: 12px 22px;
+  border-radius: 10px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.25);
+  margin-bottom: 20px;
+}
+
+.topbar img {
+  width: 48px;
+  height: 48px;
+  object-fit: cover;
+  border-radius: 6px;
+  box-shadow: 0 2px 6px rgba(255,255,255,0.3);
+}
+
+.topbar h3 {
+  color: #fff;
+  font-weight: 700;
+  font-size: 1.4rem;
+  margin: 0;
+  letter-spacing: 0.6px;
+}
+
+  </style>
+</head>
+
+<body>
+
+  <!-- TOP BAR -->
+  <div class="topbar">
+    <a href="{{ url_for('homepage') }}"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRXcZvD3S0MY-KWUOKSTmhkpZyPkf-z04kBFQ&s" alt="Library Logo"></a>
+    <h3 style="color:white;font-weight:700;">Book Details</h3>
+    <div></div>
+  </div>
+
+  <!-- FLASH MESSAGES -->
+  {% with messages = get_flashed_messages() %}
+  {% if messages %}
+  <div class="mb-3">
+    {% for msg in messages %}
+    <div class="alert alert-info">{{ msg }}</div>
+    {% endfor %}
+  </div>
+  {% endif %}
+  {% endwith %}
+
+  <div class="page-card">
+
+    <div class="product-container">
+
+      <!-- PRODUCT IMAGE -->
+      <div>
+        <img src="/static/uploads/{{ storeditem_data[6] }}" class="product-img">
+      </div>
+
+      <!-- PRODUCT DETAILS -->
+      <div style="flex:1;">
+
+        <h2 style="font-weight:800; margin-bottom:15px;">
+          {{ storeditem_data[1] }}
+        </h2>
+
+        <p style="font-size:1.1rem; color:#333;">
+          {{ storeditem_data[2] }}
+        </p>
+
+        <h4 style="margin-top:20px;">
+          <strong>Price:</strong> ₹{{ storeditem_data[3] }}
+        </h4>
+
+        <p><strong>Category:</strong> {{ storeditem_data[5] }}</p>
+        <p><strong>Added on:</strong> {{ storeditem_data[9] }}</p>
+
+
+        <br>
+
+        <!-- BUTTONS SECTION -->
+        <div class="buttons-area">
+    <a href="{{ url_for('homepage') }}" class="btn btn-secondary btn-back">Back</a>
+
+    <form method="post" action="{{url_for('buy_now')}}">
+        <input type="hidden" name="bookid" value="{{ storeditem_data[0] }}">
+        <button class="btn-buy">Buy Now</button>
+    </form>
+</div>
+
+
+      </div>
+
+    </div>
+
+  </div>
+
+</body>
+
+</html>

@@ -1,0 +1,108 @@
+{% extends "adminpanel.html" %}
+<div>{% block div %}{% endblock %}</div>
+<div>{% block ser1 %}{% endblock %}</div>
+{% block content %}
+
+<head>
+    <title>Books List</title>
+    <style>
+        body {
+            background:url('https://images.squarespace-cdn.com/content/v1/534ad50ae4b04a5110f5ae72/f0cd330d-46de-4f2e-864a-31e2741cf6ae/Salle+Ovale%2C+BNF+Richelieu%2C+Henri+Labrouste%2C+1936.jpg') no-repeat center center/cover;
+            font-family: Arial,sans-serif;
+            margin: 40px;
+            
+        }
+
+        h1 {
+            color: white;
+            text-align: center;
+        }
+
+        a.button {
+            background: #007bff;
+            color: white;
+            padding: 8px 12px;
+            border-radius: 4px;
+            text-decoration: none;
+            Margin-right: 13%;
+        }
+
+        a.button:hover {
+            background: #0056b3;
+        }
+
+        table {
+            width: 90%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th,
+        td {
+            border: 1px solid #ccc;
+            padding: 10px;
+            text-align: left;
+        }
+
+        th {
+            background: #333;
+            color: white;
+        }
+
+        tr:nth-child(even) {
+            background: #f2f2f2;
+
+        }
+
+        .box-1 {
+            display: flex;
+            flex-direction: row;
+            margin-left:450px;
+
+        }
+        p{
+            color:white;
+            margin-left: 470px;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>📚 Books Available</h1>
+    <br>
+    <br>
+    <div class="box-1">
+        <a href="{{url_for('addbook')}}" class="button">+ Add Book</a>
+        <br>
+
+        <a href="{{url_for('booklist')}}" class="button"> View Book</a>
+        <br>
+    </div>
+    <br><br>
+    {% if books %}
+    <table>
+        <tr>
+            <th>ID1</th>
+            <th>Title</th>
+            <th>Author</th>
+            <th>Genre</th>
+            <th>Available</th>
+            <th>Actions</th>
+        </tr>
+        {% for book in books %}
+        <tr>
+            <td>{{ book[0] }}</td>
+            <td>{{ book[1] }}</td>
+            <td>{{ book[2] }}</td>
+            <td>{{ book[3] }}</td>
+            <td>{{ book[4] }}</td>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+    {% else %}
+    <p>No books found. Add some!</p>
+    {% endif %}
+</body>
+
+{% endblock %}

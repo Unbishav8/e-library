@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>E-library</title>
+
+  <!-- Bootstrap -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+
+  <style>
+    :root {
+  --accent: #ffe082;
+  --glass: rgba(255, 255, 255, 0.80);
+  --muted: #6b7280;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  min-height: 100vh;
+  font-family: "Poppins", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  background: url('https://images.squarespace-cdn.com/content/v1/534ad50ae4b04a5110f5ae72/f0cd330d-46de-4f2e-864a-31e2741cf6ae/Salle+Ovale%2C+BNF+Richelieu%2C+Henri+Labrouste%2C+1936.jpg')
+  no-repeat center center/cover;
+  color: #111;
+}
+
+.topbar p {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: black;
+  text-align: center;
+}
+
+.logo {
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  display: block;
+  margin: 0 auto 15px auto;
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+}
+
+.card-wrap {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.cart-card {
+  background: var(--glass);
+  border-radius: 12px;
+  padding: 20px;
+  margin: 40px auto 150px auto;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+  border: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+.cart-list {
+  width: 100%;
+}
+
+.cart-item {
+  display: grid;
+  grid-template-columns: 100px 1fr 120px 120px;
+  gap: 12px;
+  align-items: center;
+  padding: 12px 8px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.cart-item:last-child {
+  border-bottom: none;
+}
+
+.item-img img {
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+}
+
+.item-title {
+  font-weight: 700;
+  margin-bottom: 4px;
+  font-size: 1rem;
+}
+
+.item-meta {
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+.small-btn {
+  padding: 6px 10px;
+  font-size: 0.85rem;
+}
+
+.price {
+  text-align: right;
+  font-weight: 700;
+  font-size: 1rem;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 60px;
+  color: #fff;
+  font-weight: 600;
+  font-size: 1.2rem;
+}
+/* Summary container */
+.summary {
+    width: 320px;             /* fixed width */
+    float: right;             /* right side, use left if you prefer */
+    margin-left: 20px;        /* space between items and summary */
+    font-family: Arial, sans-serif;
+    margin-bottom:50px;
+    margin-top:50px;
+    
+}
+
+/* Summary box styling */
+.summary-box {
+    background: #fff;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+}
+
+/* Each row in the summary */
+.summary-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 6px 0;
+    font-size: 15px;
+    color: #333;
+}
+
+/* Grand total row */
+.summary-row.grand {
+    font-weight: 700;
+    font-size: 17px;
+    margin-top: 8px;
+}
+
+/* Divider line */
+/* .summary-box hr,
+.summary-box div[style*="height:1px"] {
+    border: none;
+    height: 1px;
+    background: rgba(0,0,0,0.06);
+    margin: 8px 0;
+} */
+
+/* Action buttons */
+.actions {
+    margin-top: 15px;
+}
+
+.actions a,
+.actions button {
+    width: 100%;
+    display: block;
+    font-weight: 600;
+    border-radius: 8px !important;
+    padding: 10px 0;
+    text-align: center;
+    text-decoration: none;
+}
+
+/* Outline secondary button */
+.btn-outline-secondary {
+    border-width: 2px;
+    color: #444;
+}
+
+/* Primary checkout button */
+.btn-primary {
+    background: linear-gradient(90deg,#ffd54a,#ffb74d) !important;
+    border: none !important;
+    color: #000;
+}
+
+/* Responsive: stack summary under items on small screens */
+@media (max-width: 768px) {
+    .summary {
+        width: 100%;
+        float: none;
+        margin: 0 0 20px 0;
+    }
+}
+
+
+@media (max-width: 880px) {
+  .cart-item {
+    grid-template-columns: 80px 1fr 100px;
+  }
+
+  .price {
+    text-align: right;
+  }
+
+  .item-img img {
+    width: 80px;
+    height: 80px;
+  }
+}
+
+  </style>
+</head>
+
+<body>
+  <div class="card-wrap">
+
+    <div class="topbar">
+      <a href="{{ url_for('homepage') }}" aria-label="#"></a>
+      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRXcZvD3S0MY-KWUOKSTmhkpZyPkf-z04kBFQ&s" alt="#"
+        class="logo">
+      <p>whishlist</p>
+      <div></div>
+    </div>
+
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+    <div class="mb-3">
+      {% for msg in messages %}
+      <div class="alert alert-info" role="alert">{{ msg }}</div>
+      {% endfor %}
+    </div>
+    {% endif %}
+    {% endwith %}
+
+    {% if not books %}
+    <div class="empty-state">
+      Your store is empty. <a href="{{ url_for('mybooks') }}"
+        style="color: #ffe082; text-decoration:underline;">Buy Now</a>
+    </div>
+    {% else %}
+    <div class="cart-card">
+      <div class="cart-list" role="list">
+        <!-- Header row -->
+        <div
+          style="display:grid; grid-template-columns: 100px 1fr 120px 120px; gap:12px; padding:8px 8px; border-bottom:1px solid rgba(0,0,0,0.06); margin-bottom:6px;">
+          <div style="font-weight:700; color:#374151;">Product</div>
+          <div></div>
+
+          <div style="text-align:right; font-weight:700; color:#374151;">Subtotal</div>
+        </div>
+
+        {% for book in books %}
+       <div class="cart-item" role="listitem" aria-label="#">
+          <div class="item-img">  <a href="{{ url_for('read_item', bookid=book.id) }}">
+           <img src="{{ url_for('static', filename='uploads/' ~ (book[6] if book[6] else 'default.png')) }}"></a>
+
+
+          </div>
+
+
+          <div>
+            <div class="item-title">{{ book.name }}</div>
+            <div class="item-meta">
+              Category: {{ book.category }} &nbsp; • &nbsp;
+              Price: ₹{{ book.price }}
+            </div>
+          </div>
+
+          <div>
+            <!-- Update quantity -->
+
+
+            <div style="margin-top:8px;">
+              <a href="{{ url_for('remove_cart', bookid=book.id) }}">
+                <button class="btn btn-danger btn-sm small-btn">Remove</button>
+              </a>
+            </div>
+          </div>
+           
+          <div class="price">₹ {{ book.subtotal }}</div>
+
+        </div>
+        {% endfor %}
+
+
+      </div>
+
+      <div class="summary" aria-hidden="false">
+        <div class="summary-box">
+          <div class="summary-row">
+            <div>Items total</div>
+            <div>₹ {{books_total if books_total is defined else '0.00' }} </div>
+          </div>
+          <div class="summary-row">
+            <div>Delivery</div>
+            <div>₹ {{ delivery if delivery is defined else '0.00' }}</div>
+          </div>
+          <div class="summary-row">
+            <div>Tax</div>
+            <div>₹ {{ tax if tax is defined else '0.00' }}</div>
+          </div>
+          <div style="height:1px; background: rgba(0,0,0,0.06); margin:8px 0;"></div>
+          <div class="summary-row grand">
+            <div>Grand total</div>
+            <div>₹ {{grand_total if grand_total is defined else '0.00'}} </div>
+          </div>
+
+          <div class="actions">
+          
+            <a href="{{url_for('pay_cart')}}" class="d-inline" style="width:100%;">
+              <button type="submit" class="btn btn-primary w-100"
+                style="background: linear-gradient(90deg,#ffd54a,#ffb74d); border:none; margin-top:8px;">Checkout</button>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+    {% endif %}
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
+
+  <script>
+    // small enhancement: confirm removal on desktop (buttons inside forms will still submit)
+    document.querySelectorAll('form[action*="removecart"]').forEach(f => {
+      f.addEventListener('submit', function (e) {
+        if (!confirm('Remove this item from cart?')) e.preventDefault();
+      });
+    });
+  </script>
+</body>
+
+</html>

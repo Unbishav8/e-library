@@ -1,0 +1,126 @@
+{% extends "homepage.html" %}
+<div>{% block div %}{% endblock %}</div>
+<div>{% block ser1 %}{% endblock %}</div>
+{% block content %}
+
+<head>
+    <title>Library Rent Timer</title>
+
+    <style>
+        body {
+            font-family: Arial;           
+            padding-top: 30px;
+        }
+
+        #rentBox {
+            font-size: 24px;
+            color: green;
+            margin-top: 10px;
+        }
+
+        #timer {
+            font-size: 30px;
+            color: red;
+        }
+
+        .downloadBtn {
+            margin-top: -50px;
+            padding: 10px 20px;
+            font-size: 18px;
+            margin-left: -50px;
+
+        }
+
+        #notesBox {
+            width: 300px;
+            height: 100px;
+            margin-top: 20px;
+            font-size: 16px;
+        }
+        .text{
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+    <div class=" text">
+        <h1>Library Book Rent Timer</h1>
+        <div id="timerRow">
+            <span id="timer">Free reading time: 0 min 0 sec</span>
+            <button id="buyBtn" disabled>Buy Now</button>
+        </div>
+
+        <p id="rentBox">Rent₹: 0 </p>
+
+    </div>
+
+    <iframe id="pdfFrame" src="{{ url_for('pdfview', bookid=bookid) }}#toolbar=0" width="100%" height="800px"
+        style="border:none;">
+    </iframe>
+
+     <!-- jsPDF Library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+    <script>
+        let seconds = 0;
+        let minutes = 0;
+        let totalRent = 0;
+
+        const FREE_MINUTES = 20;
+        const rentPerMinute = {{ rent }};
+
+        const timerEl = document.getElementById("timer");
+        const rentEl = document.getElementById("rentBox");
+        const pdfFrame = document.getElementById("pdfFrame");
+        const buyBtn = document.getElementById("buyBtn");
+
+        const timer = setInterval(() => {
+            seconds++;
+
+            if (seconds === 60) {
+                seconds = 0;
+                minutes++;
+                totalRent += rentPerMinute;
+                rentEl.textContent = "Rent₹: " + totalRent;
+
+            }
+
+            /* FREE TIME LOGIC */
+            if (minutes < FREE_MINUTES) {
+                timerEl.textContent =
+                    "Free reading time: " + minutes + " min " + seconds + " sec";
+            }
+
+            /* AFTER FREE TIME */
+            if (minutes === FREE_MINUTES && seconds === 0) {
+                clearInterval(timer);
+
+                // Disable PDF
+                pdfFrame.style.pointerEvents = "none";
+                pdfFrame.style.opacity = "0.2";
+
+                // Enable Buy Button
+                buyBtn.disabled = false;
+                buyBtn.style.background = "green";
+                buyBtn.style.color = "white";
+
+                timerEl.textContent = "Free time over. Please buy to continue.";
+               rentEl.textContent = "Rent₹: " + totalRent + " / Rupess";
+
+            }
+
+        }, 1000);
+
+        /* Buy Button Action */
+        buyBtn.addEventListener("click", () => {
+            alert("Redirect to payment page");
+            // window.location.href = "/payment";
+        });
+
+    </script>
+
+</body>
+
+
+{% endblock %}

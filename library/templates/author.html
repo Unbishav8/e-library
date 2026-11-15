@@ -1,0 +1,205 @@
+
+{% extends "homepage.html" %}      
+<div>{% block div %}{% endblock %}</div>
+<div>{% block ser1 %}{% endblock %}</div>
+{% block content %}
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Authors Section</title>
+    <style>
+        /* ===== Global Styles ===== */
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            color: #333;
+            height: 100vh;
+            background: url('https://images.unsplash.com/photo-1519681393784-d120267933ba?auto=format&fit=crop&w=1920&q=80') no-repeat center center/cover;
+            backdrop-filter: blur(4px);
+            overflow: hidden;
+            /* prevent body scroll */
+        }
+
+        /* ===== Header + Search Sticky Section ===== */
+        header {
+            position: sticky;
+            margin-top: 50px;
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(10px);
+            text-align: center;
+            border-radius: 8px;
+            z-index: 10;
+
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            margin: 10px 0;
+            color: #2c3e50;
+        }
+
+        /* ===== Scrollable Authors Container ===== */
+        .scroll-container {
+            height: calc(100vh - 140px);
+            /* remaining height after header */
+            overflow-y: auto;
+            padding: 30px 40px;
+        }
+
+        .authors-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            max-width: 1200px;
+            margin-top: 35px;
+        }
+
+        /* ===== Author Cards ===== */
+        .author-card {
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 15px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .author-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .author-card img {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-bottom: 15px;
+        }
+
+        .author-name {
+            font-size: 1.2em;
+            font-weight: 600;
+        }
+
+        .author-genre {
+            color: #777;
+            font-size: 0.9em;
+            margin-bottom: 10px;
+        }
+
+        .author-bio {
+            font-size: 0.9em;
+            line-height: 1.4;
+        }
+
+        @media (max-width: 600px) {
+            .search-box input {
+                width: 90%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="search-container">
+        <form class="search-box">
+            <input type="text" id="searchInput" onkeyup="searchAuthors()" placeholder="Search for an author...">
+            <button><i class="fa fa-search"></i></button>
+        </form>
+    </div>
+    <!-- Sticky Header Section -->
+    <header>
+        <h1>Favourite Authors</h1>
+
+    </header>
+
+    <div class="scroll-container">
+        <div class="authors-container" id="authorsList">
+            <div class="author-card">
+                <img src="https://tse3.mm.bing.net/th/id/OIP.tLczsd5uVpoUGi5FNQv7YQHaE_?pid=Api&P=0&h=180"
+                    alt="J.K. Rowling">
+                <div class="author-name">J.K. Rowling</div>
+                <div class="author-genre">Fantasy</div>
+                <div class="author-bio">Author of the Harry Potter series, known for her imaginative storytelling and
+                    world-building.</div>
+            </div>
+            <div class="author-card">
+                <img src="https://tse1.mm.bing.net/th/id/OIP.9_uNi5ZDUN-CiwxJ-o0yDAHaE8?pid=Api&P=0&h=180"
+                    alt="George R.R. Martin">
+                <div class="author-name">George R.R. Martin</div>
+                <div class="author-genre">Fantasy</div>
+                <div class="author-bio">Creator of A Song of Ice and Fire, the series that inspired Game of Thrones.
+                </div>
+            </div>
+            <div class="author-card">
+                <img src="https://tse1.mm.bing.net/th/id/OIP.7eQ1IxlAeD9fp-AVhLmuBgHaEK?pid=Api&P=0&h=180"
+                    alt="Agatha Christie">
+                <div class="author-name">Agatha Christie</div>
+                <div class="author-genre">Mystery</div>
+                <div class="author-bio">World-renowned mystery novelist known for Hercule Poirot and Miss Marple
+                    detective stories.</div>
+            </div>
+            <div class="author-card">
+                <img src="https://tse2.mm.bing.net/th/id/OIP.O6FNGCswtzQ4G8I09Nt1QQHaDt?pid=Api&P=0&h=180"
+                    alt="Stephen King">
+                <div class="author-name">Stephen King</div>
+                <div class="author-genre">Horror / Thriller</div>
+                <div class="author-bio">Master of horror, famous for novels like It, The Shining, and Carrie.</div>
+            </div>
+            <div class="author-card">
+                <img src="https://tse1.mm.bing.net/th/id/OIP.Hb3UAGll3LPW0T9yAUzVNwHaLH?pid=Api&P=0&h=180"
+                    alt="Chetan Bhagat">
+                <div class="author-name">Chetan Bhagat</div>
+                <div class="author-genre">Contemporary Fiction</div>
+                <div class="author-bio">Indian author known for Five Point Someone, 2 States, and stories inspired by
+                    youth and modern India.</div>
+            </div>
+            <div class="author-card">
+                <img src="https://tse1.mm.bing.net/th/id/OIP.gGTVFZ7kYzoS9PSHKdnrIgHaFY?pid=Api&P=0&h=180"
+                    alt="Amish Tripathi">
+                <div class="author-name">Amish Tripathi</div>
+                <div class="author-genre">Mythological Fiction</div>
+                <div class="author-bio">Famous for The Shiva Trilogy and Ram Chandra Series, blending mythology with
+                    modern storytelling.</div>
+            </div>
+            <div class="author-card">
+                <img src="https://tse1.mm.bing.net/th/id/OIP.oWyLKpBK4UAFSwAF0LKYzgHaIy?pid=Api&P=0&h=180"
+                    alt="Arundhati Roy">
+                <div class="author-name">Arundhati Roy</div>
+                <div class="author-genre">Literary Fiction</div>
+                <div class="author-bio">Booker Prize-winning author of The God of Small Things, known for her powerful
+                    and poetic prose.</div>
+            </div>
+            <div class="author-card">
+                <img src="https://tse1.mm.bing.net/th/id/OIP.afMzIBCetNcP0dli3RR58AHaE8?pid=Api&P=0&h=180"
+                    alt="Ruskin Bond">
+                <div class="author-name">Ruskin Bond</div>
+                <div class="author-genre">Children's Literature / Fiction</div>
+                <div class="author-bio">Beloved Indian author known for his heartwarming tales set in the hills of
+                    Mussoorie and Dehradun.</div>
+            </div>
+            <div class="author-card">
+                <img src="https://tse1.mm.bing.net/th/id/OIP.LdfzuLQooCCdYUNOOw8y7AHaGL?pid=Api&P=0&h=180"
+                    alt="R.K. Narayan">
+                <div class="author-name">R.K. Narayan</div>
+                <div class="author-genre">Fiction</div>
+                <div class="author-bio">One of India’s greatest writers, known for Malgudi Days and his simple yet
+                    profound storytelling.</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function searchAuthors() {
+            const input = document.getElementById("searchInput").value.toLowerCase();
+            const authors = document.querySelectorAll(".author-card");
+            authors.forEach(author => {
+                const name = author.querySelector(".author-name").textContent.toLowerCase();
+                author.style.display = name.includes(input) ? "" : "none";
+            });
+        }
+    </script>
+</body>
+{% endblock %}

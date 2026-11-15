@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>E-Library | Welcome</title>
+
+  <style>
+    body {
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: url('https://images.squarespace-cdn.com/content/v1/534ad50ae4b04a5110f5ae72/f0cd330d-46de-4f2e-864a-31e2741cf6ae/Salle+Ovale%2C+BNF+Richelieu%2C+Henri+Labrouste%2C+1936.jpg') no-repeat center center/cover;
+      font-family: 'Poppins', sans-serif;
+      overflow: hidden;
+    }
+
+    .container {
+      text-align: center;
+      background: rgba(255, 255, 255, 0.1);
+      padding: 40px;
+      border-radius: 10px;
+      width: 90%;
+      max-width: 400px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+      transition: all 0.4s ease;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .container:hover {
+      transform: scale(1.05);
+      background: rgba(255, 255, 255, 0.2);
+      box-shadow: 0 0 30px rgba(0, 150, 255, 0.7), 0 0 60px rgba(0, 150, 255, 0.3);
+      border-color: rgba(0, 200, 255, 0.6);
+    }
+
+    .container img {
+      width: 90px;
+      height: 90px;
+      border-radius: 50%;
+      margin-bottom: 15px;
+      transition: all 0.3s ease;
+    }
+
+    .container:hover img {
+      box-shadow: 0 0 20px rgba(0, 180, 255, 0.8);
+      transform: scale(1.05);
+    }
+
+    h1 {
+      font-size: 28px;
+      margin-bottom: 10px;
+      color: #fff;
+    }
+
+    p {
+      font-size: 16px;
+      margin-bottom: 25px;
+      color: #f0f0f0;
+    }
+
+    .btn {
+      background-color: #0056b3;
+      border: none;
+      color: white;
+      padding: 10px 25px;
+      font-size: 16px;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: 0.3s ease;
+      width: 100%;
+      margin: 8px 0;
+    }
+
+    .btn:hover {
+      background-color: #0080ff;
+      box-shadow: 0 0 15px rgba(0, 128, 255, 0.6);
+    }
+
+    footer {
+      position: absolute;
+      bottom: 10px;
+      width: 100%;
+      text-align: center;
+      color: white;
+      font-size: 14px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="container">
+    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRXcZvD3S0MY-KWUOKSTmhkpZyPkf-z04kBFQ&s" alt="Library Logo">
+   <div>
+    <h1>E-Library Management System </h1>
+    <p> Welcome to Your Digital Library</p>
+    </div>
+
+    <!-- User Login -->
+    <a href="{{ url_for('userlogin') }}">
+      <button class="btn">User Login</button>
+    </a>
+
+    <!-- Admin Login -->
+    <a href="{{url_for('adminlogin')}}">
+      <button class="btn">Admin Login</button>
+    </a>
+
+  <footer>
+    © 2025 E-Library Management System
+  </footer>
+
+</body>
+</html>

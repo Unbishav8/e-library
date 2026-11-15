@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Dashboard | E-Library</title>
+
+  <!-- Bootstrap -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- FontAwesome -->
+  <script src="https://kit.fontawesome.com/4dc31d81f6.js" crossorigin="anonymous"></script>
+
+  <style>
+    :root {
+      --sidebar-width: 200px;
+      --primary: #007bff;
+      --bg: #f5f6fa;
+    }
+
+    body {
+      background: var(--bg);
+      font-family: Arial, sans-serif;
+      margin: 0;
+    }
+
+    a {
+      text-decoration: none;
+    }
+
+    /* ================= SIDEBAR ================= */
+    .sidebar {
+      position: fixed;
+      top: 8px;
+      left: 8px;
+      height: 98vh;
+      width: var(--sidebar-width);
+      background: #fff;
+      box-shadow: 2px 0 10px rgba(0, 0, 0, .1);
+      padding: 20px 0;
+      border-radius: 25px;
+
+    }
+
+    .sidebar__user {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 0 20px;
+      margin-bottom: 30px;
+    }
+
+    /* Profile image (reduced size) */
+    .sidebar__img {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      overflow: hidden;
+    }
+
+    .sidebar__img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .sidebar__info h3 {
+      font-size: 16px;
+      margin: 0;
+      color: #000;
+      font-weight: bold;
+
+    }
+
+    .sidebar__title {
+      font-size: 12px;
+      font-weight: bold;
+      padding: 10px 20px;
+      text-transform: uppercase;
+      color: #888;
+    }
+
+    .sidebar__link,
+    .dropdown-btn {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 20px;
+      color: #555;
+      font-weight: bold;
+      border: none;
+      background: none;
+      width: 100%;
+      text-align: left;
+      cursor: pointer;
+    }
+
+    .sidebar__link:hover,
+    .dropdown-btn:hover {
+      background: #f0f4ff;
+      color: var(--primary);
+    }
+
+    .dropdown-container {
+      display: none;
+      padding-left: 40px;
+    }
+
+    .dropdown-container a {
+      display: block;
+      padding: 6px 0;
+      color: #777;
+      font-size: 14px;
+      text-decoration: none;
+    }
+
+    .dropdown-container a:hover {
+      color: var(--primary);
+    }
+
+    /* ================= MAIN CONTENT ================= */
+    .main-content {
+      margin-left: var(--sidebar-width);
+      padding: 30px;
+    }
+
+    /* Search bar */
+    .search-container {
+      position: fixed;
+      top: 20px;
+      left: calc(var(--sidebar-width) + 40px);
+      width: calc(100% - var(--sidebar-width) - 60px);
+      z-index: 900;
+      display: flex;
+      justify-content: center;
+    }
+
+    .search-box {
+      display: flex;
+      background: #fff;
+      border-radius: 25px;
+      padding: 5px;
+      width: 60%;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, .1);
+    }
+
+    .search-box input {
+      border: none;
+      border-radius: 25px;
+      outline: none;
+      padding: 10px;
+      flex: 1;
+    }
+
+    .search-box button {
+      background: var(--primary);
+      color: #fff;
+      border: none;
+      padding: 8px 18px;
+      border-radius: 25px;
+    }
+
+    /* Dashboard cards */
+    .dash-card {
+      border-radius: 15px;
+      padding: 25px;
+      color: white;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, .1);
+    }
+
+    .card1 {
+      background: #007bff;
+    }
+
+    .card2 {
+      background: #28a745;
+    }
+
+    .card3 {
+      background: #ffc107;
+      color: #000;
+    }
+
+    .dash-card h2 {
+      font-size: 40px;
+      margin: 0;
+    }
+
+    .dash-card p {
+      margin: 0;
+      font-size: 18px;
+    }
+
+    .sidebar__actions {
+      margin-top: auto;
+    }
+
+    .sidebar__actions button {
+      cursor: pointer;
+    }
+
+    .sidebar__actions {
+      display: grid;
+      row-gap: 1.5rem;
+    }
+    .title{
+      text-align: center;
+      margin-top: 80px;
+      padding: 20px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- ================= SIDEBAR ================= -->
+  <nav class="sidebar">
+
+    <div class="sidebar__user">
+      {% if not session.get('user') %}
+      <div class="sidebar__img">
+        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRXcZvD3S0MY-KWUOKSTmhkpZyPkf-z04kBFQ&s">
+      </div>
+      {% endif %}
+      {% if session.get('user') %}
+      <div class="sidebar__img">
+        <a href="{{ url_for('userprofile') }}">
+          {% if profile %}
+          <img src="/static/imeges/{{profile[1]}}" alt="Image">
+          {% else %}
+          <img src="{{ url_for('static/images/', filename='default.jpg') }}" alt="Default Image">
+          {% endif %}
+        </a>
+      </div>
+      {% endif %}
+
+      {% if session.get('user') %}
+      <div class="sidebar__info">
+        <h3>{{ profile[0][0:10] }}</h3>
+      </div>
+      {% endif %}
+      {% if not session.get('user') %}
+      <div class="sidebar__info">
+        <h3>E-Library</h3>
+      </div>
+      {% endif %}
+    </div>
+    <div class="sidebar__title">Manage</div>
+    <a href="{{url_for('homepage')}}" class="sidebar__link">
+      <i class="fa-solid fa-book-open"></i> Dashboard
+    </a>
+
+    <a href="{{url_for('mybooks')}}" class="sidebar__link">
+      <i class="fa-solid fa-book-open"></i> My Books
+    </a>
+
+    <button class="dropdown-btn">
+      <i class="fa-solid fa-layer-group"></i> Category
+      <i class="fa fa-caret-down ms-auto"></i>
+    </button>
+
+    <div class="dropdown-container">
+      <a href="{{url_for('category',ctype='Frontend')}}">Frontend</a>
+      <a href="{{url_for('category',ctype='Backend')}}">Backend</a>
+      <a href="{{url_for('category',ctype='Stories')}}">Stories</a>
+      <a href="{{url_for('category',ctype='Kids')}}">Kids</a>
+      <a href="{{url_for('category',ctype='Geography')}}">Geography</a>
+    </div>
+
+    <div class="sidebar__title mt-4">About</div>
+    <div class="sidebar__list">
+
+      <a href="{{url_for('authors')}}" class="sidebar__link">
+        <i class="fa-solid fa-at"></i>
+        <span>Authors</span>
+      </a>
+
+      <a href="{{url_for('popular_books')}}" class="sidebar__link">
+        <i class="fa-solid fa-arrow-up-right-dots"></i>
+        <span>Popular</span>
+      </a>
+    </div>
+    </div>
+    {% if not session.get('user') %}
+    <div class="sidebar__actions">
+      <i class="fa-solid fa-user-tie sidebar__link sidebar__theme" id="theme-button">
+        <a href="{{url_for('adminlogin')}}">
+          <span>Admin</span>
+        </a>
+      </i>
+      {% endif %}
+
+      <button class="sidebar__link">
+        {% if session.get('user') %}
+        <i class="ri-logout-box-r-fill"></i>
+        <a href="{{url_for('userlogout')}}">
+          <span>Log Out</span></a>
+        {% endif %}
+      </button>
+
+      <button class="sidebar__link">
+        {% if not session.get('user') %}
+        <i class="ri-logout-box-r-fill"></i>
+        <a href="{{url_for('userlogin')}}">
+          <span>Login</span></a>
+        {% endif %}
+      </button>
+    </div>
+  </nav>
+  <!-- ================= MAIN ================= -->
+  <div class="main-content">
+    <div>{% block ser1 %}
+      <div class="search-container">
+        <form class="search-box" method="post" action="{{url_for('user_search')}}">
+          <input type="search" name="search" placeholder="Search books...">
+          <button><i class="fa fa-search"></i></button>
+        </form>
+      </div>
+    </div>{% endblock %}
+    <div class="content">
+      {% block content %}{% endblock %}
+    </div>
+    <div>{% block div %}
+      <h2 class=" title ">Welcome to <strong>E-Library Management System</strong></h2>
+      <div class="row g-4">
+        <div class="col-md-4">
+          <div class="dash-card card1">
+            <h2>{{ total_books }}</h2>
+            <p>Total Books</p>
+          </div>
+        </div>
+
+        <div class="col-md-4">
+          <div class="dash-card card2">
+            <h2>45</h2>
+            <p>Total Users</p>
+          </div>
+        </div>
+
+        <div class="col-md-4">
+          <div class="dash-card card3">
+            <h2>{{ total_category }}</h2>
+            <p>Total Categories</p>
+          </div>
+        </div>
+      </div>
+    </div>    
+    {% endblock %}
+  </div>
+  <div>{% block msg %}
+    <!-- Flash messages -->
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+    {% for message in messages %}
+    <center style="color: rgb(245, 233, 8);font-weight: bold;">{{ message }}</center>
+    {% endfor %}
+    {% endif %}
+    {% endwith %}
+  </div>{% endblock %}
+  <!-- ================= SCRIPT ================= -->
+  <script>
+    document.querySelector(".dropdown-btn").addEventListener("click", function () {
+      this.classList.toggle("active");
+      let dropdown = this.nextElementSibling;
+      dropdown.style.display = dropdown.style.display === "block" ? "none" : "block";
+    });
+  </script>
+</body>
+
+</html>

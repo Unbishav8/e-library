@@ -1,0 +1,278 @@
+{% extends "adminpanel.html" %}
+<div>{% block div %}{% endblock %}</div>
+<div>{% block ser1 %}{% endblock %}</div>
+<div>{% block msg %}{% endblock %}</div>
+{% block content %}
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Book</title>
+    <style>
+        /* =======================
+   Reset & Base Styles
+======================= */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #f7f8fc, #e3e9ff);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        /* =======================
+   Form Container
+======================= */
+        .add {
+            width: 130%;
+            max-width: 550px;
+            background: #ffffff;
+            padding: 35px 30px;
+            border-radius: 20px;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+            animation: fadeIn 0.6s ease-in-out;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            position: relative;
+        }
+
+        /* =======================
+   Flash Messages
+======================= */
+        .flash-message {
+            background-color: #fffae6;
+            color: #856404;
+            padding: 10px 15px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            text-align: center;
+            font-weight: 500;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        /* =======================
+   Labels & Inputs
+======================= */
+        .form-label {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 6px;
+        }
+
+        .form-control,
+        select,
+        textarea,
+        #formFile {
+            width: 100%;
+            padding: 12px 15px;
+            border-radius: 12px;
+            border: 1px solid #d7d7d7;
+            font-size: 15px;
+            transition: all 0.3s ease;
+            outline: none;
+            background: #fff;
+        }
+
+        .form-control:focus,
+        select:focus,
+        textarea:focus,
+        #formFile:focus {
+            border-color: #6c63ff;
+            box-shadow: 0 0 10px rgba(108, 99, 255, 0.25);
+        }
+
+        /* =======================
+   File Input Styling
+======================= */
+        #formFile {
+            border: 2px dashed #b6b6d2;
+            background: #f8f9ff;
+            cursor: pointer;
+            padding: 18px;
+            text-align: center;
+        }
+
+        #formFile:hover {
+            border-color: #736bff;
+            background: #f0f2ff;
+        }
+
+        /* =======================
+   Textarea
+======================= */
+        textarea {
+            resize: none;
+        }
+
+        /* =======================
+   Dropdown
+======================= */
+        .dropdown select {
+            cursor: pointer;
+            background: #fff;
+        }
+
+        .dropdown select:hover {
+            border-color: #736bff;
+        }
+
+        /* =======================
+   Buttons
+======================= */
+        button,
+        .btn-secondary {
+            padding: 12px 25px;
+            border-radius: 12px;
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        button {
+            background-color: #6c63ff;
+            color: #fff;
+            margin-top: 10px;
+        }
+
+        button:hover {
+            background-color: #574fd6;
+            box-shadow: 0 5px 15px rgba(108, 99, 255, 0.3);
+        }
+
+        .btn-secondary {
+            background-color: #f3f3f3;
+            color: #333;
+            text-decoration: none;
+            display: inline-block;
+            margin-top: 10px;
+        }
+
+        .btn-secondary:hover {
+            background-color: #e0e0e0;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        /* =======================
+   Form Layout
+======================= */
+        .add form {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .add form .button-group {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+        }
+
+        /* =======================
+   Animations
+======================= */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* =======================
+   Responsive
+======================= */
+        @media (max-width: 600px) {
+            .add {
+                padding: 25px 20px;
+            }
+
+            button,
+            .btn-secondary {
+                width: 100%;
+            }
+
+            .add form .button-group {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+    {% for message in messages %}
+    <div class="flash-message">{{ message }}</div>
+    {% endfor %}
+    {% endif %}
+    {% endwith %}
+
+    <div class="add">
+        <form method="post" enctype="multipart/form-data">
+            <div class="mb-3">
+                <label class="form-label">Book Name</label>
+                <input type="text" class="form-control" name="book_name" placeholder="Enter book title" required />
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Price</label>
+                <input type="number" class="form-control" name="price" placeholder="Enter price" required />
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Quantity</label>
+                <input type="number" class="form-control" name="quantity" placeholder="Enter quantity" required />
+            </div>
+
+            <div class="mb-3 dropdown">
+                <label class="form-label">Category</label>
+                <select name="category">
+                    <option value="" disabled selected>Select a category</option>
+                    <option value="Frontend">Frontend</option>
+                    <option value="Backend">Backend</option>
+                    <option value="Stories">Stories</option>
+                    <option value="Kids">Kids</option>
+                    <option value="Geography">Geography</option>
+                </select>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Upload File</label>
+                <input class="form-control" type="file" name="file" id="formFile" />
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Upload pdf</label>
+                <input class="form-control" type="file" name="pdf" id="formFile" />
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Description</label>
+                <textarea class="form-control" name="description" placeholder="Enter book description"
+                    rows="5"></textarea>
+            </div>
+
+            <div class="button-group">
+                <button type="submit">Submit</button>
+                <a href="{{ url_for('homepage') }}" class="btn-secondary">Back</a>
+            </div>
+        </form>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+{% endblock %}

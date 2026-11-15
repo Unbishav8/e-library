@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout - Razorpay</title>
+
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: "Segoe UI", Arial, sans-serif;
+            background: linear-gradient(135deg, #e3f2fd, #bbdefb);
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .payment-card {
+            width: 380px;
+            background: white;
+            padding: 25px 30px;
+            border-radius: 18px;
+            box-shadow: 0px 10px 35px rgba(0, 0, 0, 0.15);
+            animation: fadeIn 0.6s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        h2 {
+            margin-top: 0;
+            text-align: center;
+            font-weight: 700;
+            color: #1565c0;
+        }
+
+        h3 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #0d47a1;
+        }
+
+        .items-box {
+            background: #f5f7fa;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .items-box ul {
+            padding-left: 15px;
+        }
+
+        .items-box li {
+            margin-bottom: 8px;
+            font-size: 15px;
+            color: #333;
+        }
+
+        #rzp-button1 {
+            width: 100%;
+            padding: 14px;
+            background: #1976d2;
+            border: none;
+            color: white;
+            font-size: 16px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: 0.3s ease;
+        }
+
+        #rzp-button1:hover {
+            background: #0d47a1;
+        }
+    </style>
+
+</head>
+<body>
+
+    <div class="payment-card">
+        <h2>Your Cart Payment</h2>
+        <h3>Total Amount: ₹{{ grand_total }}</h3>
+
+        <div class="items-box">
+            <h4>Items:</h4>
+            <ul>
+                {% for item in cart_items %}
+                    <li>{{ item.name }} (x{{ item.qty }}) – ₹{{ item.subtotal }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+
+        <button id="rzp-button1">Pay Now</button>
+    </div>
+
+
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
+    <script>
+        var options = {
+            "key": "rzp_test_RhD85xqgyfh89M",
+            "amount": "{{ order.amount }}",
+            "currency": "INR",
+            "name": "E-LIBRARY",
+            "description": "Cart Checkout Payment",
+            "order_id": "{{ order.id }}",
+
+            "handler": function (response){
+                var form = document.createElement('form');
+                form.method = 'POST';
+                form.action = "/success_cart";
+
+                form.innerHTML = `
+                    <input type="hidden" name="razorpay_payment_id" value="${response.razorpay_payment_id}">
+                    <input type="hidden" name="razorpay_order_id" value="${response.razorpay_order_id}">
+                    <input type="hidden" name="razorpay_signature" value="${response.razorpay_signature}">
+                    <input type="hidden" name="grand_total" value="{{ grand_total }}">
+                `;
+
+                document.body.appendChild(form);
+                form.submit();
+            },
+
+            "prefill": {
+                "name": "Test User",
+                "email": "{{ session.get('user') }}",
+                "contact": "9999999999"
+            },
+
+            "theme": { "color": "#1976d2" }
+        };
+
+        var rzp1 = new Razorpay(options);
+
+        document.getElementById('rzp-button1').onclick = function(e){
+            rzp1.open();
+            e.preventDefault();
+        }
+    </script>
+
+</body>
+</html>

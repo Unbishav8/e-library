@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Books</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 40px;
+            font-family: 'Poppins', sans-serif;
+            background: #f4f6fa;
+        }
+
+        h2 {
+            text-align: center;
+            font-size: 32px;
+            color: #333;
+            margin-bottom: 25px;
+            font-weight: 600;
+        }
+
+        table {
+            width: 90%;
+            margin: auto;
+            border-collapse: collapse;
+            background: #ffffff;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+
+        table:hover {
+            transform: scale(1.01);
+        }
+
+        th {
+            background: #2f80ed;
+            color: #fff;
+            padding: 14px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-size: 14px;
+        }
+
+        td {
+            padding: 14px;
+            text-align: center;
+            color: #333;
+            font-size: 15px;
+            border-bottom: 1px solid #e6e6e6;
+            transition: background 0.3s ease;
+        }
+
+        tr:hover td {
+            background: #f0f6ff;
+        }
+
+        a {
+            text-decoration: none;
+            padding: 8px 14px;
+            background: #2f80ed;
+            color: #fff;
+            border-radius: 6px;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+
+        a:hover {
+            background: #1763c5;
+            box-shadow: 0 3px 8px rgba(0,0,0,0.2);
+        }
+
+        td:last-child {
+            font-size: 14px;
+            color: #555;
+        }
+
+        @media (max-width: 768px) {
+            table {
+                width: 100%;
+            }
+
+            td, th {
+                padding: 10px;
+            }
+
+            a {
+                padding: 6px 10px;
+                font-size: 13px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<h2>Available Books</h2>
+<table border="1" cellpadding="10">
+    <tr>
+        <th>Book Image</th>
+        <th>Book ID</th>
+        <th>Title</th>
+        <th>Price</th>
+        <th>Added At</th>
+       
+    </tr>
+
+   {% for i in ndata %}
+    <tr>
+        <td>
+   <a href="{{ url_for('desc_item', bookid=i[0]) }}" ><img src="{{ url_for('static', filename='uploads/' ~ i[4]) }}" alt="Book" style="width:100px;">
+</td></a>
+
+        <td>{{i[0]}}</td>
+        <td>{{i[1]}}</td>
+        <td>{{i[2]}}</td>
+        <td>{{i[3]}}</td>
+        <td>
+            
+
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+
+
+</body>
+</html>
