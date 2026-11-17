@@ -2,7 +2,7 @@ import os
 import smtplib #to send email from one mail another
 from email.message import EmailMessage #module used to create email template
 
-SENDER_EMAIL = os.environ.get('MAIL_USERNAME', 'vishwesh2309@gmail.com')
+SENDER_EMAIL = os.environ.get('MAIL_USERNAME', 'anushakottapalli2005@gmail.com')
 SENDER_PASSWORD = os.environ.get('MAIL_PASSWORD', 'sjtw zbjv rdem nnqo')
 
 def send_mail(to,subject,body):

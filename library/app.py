@@ -258,11 +258,12 @@ def register():
             body = f"Hello {username},\n\nYour OTP code is: {gotp}\n\nThank you!"
             try:
                 send_mail(to=useremail, subject=subject, body=body)
-                flash(f'OTP has been sent to given mail: {useremail}')
+                flash(f'OTP has been sent to your email: {useremail}')
+                return redirect(url_for('otpverify', udata=endata(data=userdata)))
             except Exception as e:
                 print(f"Email error: {e}")
-                flash(f'Notice: OTP generated: {gotp}')
-            return redirect(url_for('otpverify', udata=endata(data=userdata)))
+                flash('Failed to send OTP to your email. Please verify your email and network connection.')
+                return redirect(url_for('register'))
         else:
             flash('Email already registered. Please log in.')
             return redirect(url_for('userlogin'))
@@ -353,7 +354,7 @@ def fgtpwd():
                 flash(f'Reset link has been sent to {useremail}')
             except Exception as e:
                 print(f"Mail error: {e}")
-                flash(f'Reset link: {reset_url}')
+                flash('Could not send reset link. Please check your email and network connection.')
             return redirect(url_for('fgtpwd'))
         else:
             flash('User email not found. Please register.')
@@ -719,10 +720,11 @@ def adminregister():
             try:
                 send_mail(to=adminemail, subject=subject, body=body)
                 flash(f'OTP sent to {adminemail}')
+                return redirect(url_for('adminotpverify', enadmin=endata(data=admindata)))
             except Exception as e:
                 print(f"Mail error: {e}")
-                flash(f'Admin OTP: {gotp}')
-            return redirect(url_for('adminotpverify', enadmin=endata(data=admindata)))
+                flash('Failed to send OTP to email. Please verify your email and try again.')
+                return redirect(url_for('adminregister'))
         else:
             flash('Admin email already exists. Please login.')
             return redirect(url_for('adminlogin'))
